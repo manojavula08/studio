@@ -1,3 +1,4 @@
+
 import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 import { HeroSection } from '@/components/sections/landing/hero-section';
