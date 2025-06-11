@@ -1,9 +1,9 @@
 
 "use client";
 
-import { useState } from 'react';
+// Removed useState as state is now managed by parent
 import { AiRecommendationCard, type AiRecommendation } from './ai-recommendation-card';
-import { Zap } from 'lucide-react'; 
+import { Zap } from 'lucide-react';
 
 const mockRecommendations: AiRecommendation[] = [
   {
@@ -52,18 +52,14 @@ const mockRecommendations: AiRecommendation[] = [
   },
 ];
 
-export function AiRecommendationsSection() {
-  const [watchedItemIds, setWatchedItemIds] = useState<string[]>([]);
+interface AiRecommendationsSectionProps {
+  currentWatchlistIds: string[];
+  onToggleWatchlist: (id: string) => void;
+}
 
-  const handleToggleWatchlist = (id: string) => {
-    setWatchedItemIds(prevIds => 
-      prevIds.includes(id) 
-        ? prevIds.filter(itemId => itemId !== id)
-        : [...prevIds, id]
-    );
-    // In a real app, you would also dispatch an action to a global store or make an API call.
-    console.log("Toggled watchlist for item:", id, "Current watchlist:", watchedItemIds.includes(id) ? watchedItemIds.filter(itemId => itemId !== id) : [...watchedItemIds, id] );
-  };
+export function AiRecommendationsSection({ currentWatchlistIds, onToggleWatchlist }: AiRecommendationsSectionProps) {
+  // Local state for watchedItemIds has been removed.
+  // The onToggleWatchlist function prop now handles state updates in the parent.
 
   return (
     <section className="space-y-4">
@@ -76,11 +72,11 @@ export function AiRecommendationsSection() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {mockRecommendations.map((recommendation) => (
-          <AiRecommendationCard 
-            key={recommendation.id} 
+          <AiRecommendationCard
+            key={recommendation.id}
             recommendation={recommendation}
-            isInWatchlist={watchedItemIds.includes(recommendation.id)}
-            onToggleWatchlist={handleToggleWatchlist}
+            isInWatchlist={currentWatchlistIds.includes(recommendation.id)}
+            onToggleWatchlist={onToggleWatchlist} // Pass down the handler from props
           />
         ))}
       </div>

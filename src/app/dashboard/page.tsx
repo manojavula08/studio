@@ -1,6 +1,7 @@
 
 "use client";
 
+import { useState } from 'react'; // Added useState
 import { Button } from '@/components/ui/button';
 import { StatCard } from '@/components/sections/dashboard/stat-card';
 import { AiRecommendationsSection } from '@/components/sections/dashboard/ai-recommendations-section';
@@ -8,6 +9,16 @@ import { QuickActionsSection } from '@/components/sections/dashboard/quick-actio
 import { TrendingUp, Heart, Target, CalendarDays, Zap } from 'lucide-react';
 
 export default function DashboardOverviewPage() {
+  const [watchedItemIds, setWatchedItemIds] = useState<string[]>([]); // Store IDs
+
+  const handleToggleWatchlistDashboard = (itemId: string) => {
+    setWatchedItemIds(prevIds =>
+      prevIds.includes(itemId)
+        ? prevIds.filter(id => id !== itemId)
+        : [...prevIds, itemId]
+    );
+  };
+
   return (
     <div className="space-y-8 p-1 md:p-0"> {/* Adjust padding for page level */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center">
@@ -26,35 +37,38 @@ export default function DashboardOverviewPage() {
 
       {/* Stat Cards Grid */}
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard 
-          title="Trending Products" 
-          value="3" 
+        <StatCard
+          title="Trending Products"
+          value="3"
           icon={TrendingUp}
-          change="+12% from last week" 
+          change="+12% from last week"
           changeType="positive"
         />
-        <StatCard 
-          title="Watchlist Items" 
-          value="0" 
-          icon={Heart} 
+        <StatCard
+          title="Watchlist Items"
+          value={watchedItemIds.length.toString()} // DYNAMIC VALUE
+          icon={Heart}
           subtext="Items being tracked"
         />
-        <StatCard 
-          title="Avg Trend Score" 
-          value="87.7" 
-          icon={Target} 
+        <StatCard
+          title="Avg Trend Score"
+          value="87.7"
+          icon={Target}
           subtext="Excellent opportunity"
         />
-        <StatCard 
-          title="Next Occasion" 
-          value="3d" 
+        <StatCard
+          title="Next Occasion"
+          value="3d"
           icon={CalendarDays}
           subtext="Back to School rush"
         />
       </div>
-      
-      <AiRecommendationsSection />
-      
+
+      <AiRecommendationsSection
+        currentWatchlistIds={watchedItemIds}
+        onToggleWatchlist={handleToggleWatchlistDashboard}
+      />
+
       <QuickActionsSection />
 
     </div>
