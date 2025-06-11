@@ -1,16 +1,21 @@
+
 "use client"
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Bar, BarChart, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from 'recharts';
+import { Bar, BarChart, Line, LineChart, XAxis, YAxis } from 'recharts';
 import type { LucideIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 interface StatCardProps {
   title: string;
   value: string;
   icon: LucideIcon;
+  iconContainerClassName?: string;
   change?: string;
   changeType?: 'positive' | 'negative';
+  changeClassName?: string;
+  subtext?: string; // For text like "Items being tracked" or "Excellent opportunity"
   chartData?: { name: string; value: number }[];
   chartType?: 'line' | 'bar';
 }
@@ -23,22 +28,42 @@ const chartConfig = {
 } satisfies Parameters<typeof ChartContainer>[0]["config"];
 
 
-export function StatCard({ title, value, icon: Icon, change, changeType, chartData, chartType = 'line' }: StatCardProps) {
+export function StatCard({ 
+  title, 
+  value, 
+  icon: Icon, 
+  iconContainerClassName,
+  change, 
+  changeType, 
+  changeClassName,
+  subtext,
+  chartData, 
+  chartType = 'line' 
+}: StatCardProps) {
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        <Icon className="h-5 w-5 text-muted-foreground" />
+    <Card className="shadow-sm hover:shadow-md transition-shadow">
+      <CardHeader className="flex flex-row items-start justify-between space-y-0 pb-1 pt-4 px-4">
+        <CardTitle className="text-sm font-medium text-muted-foreground">{title}</CardTitle>
+        <div className={cn("p-1.5 rounded-full bg-primary/10 flex items-center justify-center", iconContainerClassName)}>
+         <Icon className="h-4 w-4 text-primary" />
+        </div>
       </CardHeader>
-      <CardContent>
-        <div className="text-3xl font-bold font-headline">{value}</div>
+      <CardContent className="pb-4 px-4">
+        <div className="text-3xl font-bold font-headline text-foreground">{value}</div>
         {change && (
-          <p className={`text-xs ${changeType === 'positive' ? 'text-green-500' : 'text-red-500'}`}>
-            {change} from last month
+          <p className={cn(
+            "text-xs mt-1", 
+            changeType === 'positive' ? 'text-green-600' : 'text-red-600',
+            changeClassName
+            )}>
+            {change}
           </p>
         )}
+        {subtext && !change && ( // Only show subtext if there's no 'change' text, or adjust logic as needed
+          <p className="text-xs text-muted-foreground mt-1">{subtext}</p>
+        )}
         {chartData && chartData.length > 0 && (
-          <div className="h-[60px] mt-2 -ml-4">
+          <div className="h-[50px] mt-2 -ml-4 -mr-2"> {/* Adjusted margins for tighter fit */}
             <ChartContainer config={chartConfig} className="h-full w-full">
               {chartType === 'line' ? (
                 <LineChart
@@ -48,7 +73,7 @@ export function StatCard({ title, value, icon: Icon, change, changeType, chartDa
                     left: 0,
                     right: 0,
                     top: 5,
-                    bottom: 5,
+                    bottom: 0,
                   }}
                 >
                   <XAxis dataKey="name" hide />
@@ -73,7 +98,7 @@ export function StatCard({ title, value, icon: Icon, change, changeType, chartDa
                     left: 0,
                     right: 0,
                     top: 5,
-                    bottom: 5,
+                    bottom: 0,
                   }}
                 >
                   <XAxis dataKey="name" hide />
