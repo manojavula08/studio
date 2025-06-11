@@ -1,3 +1,5 @@
+"use client";
+
 import { StatCard } from '@/components/sections/dashboard/stat-card';
 import { DollarSign, MousePointerClick, TrendingUp, Star } from 'lucide-react';
 
