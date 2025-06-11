@@ -1,87 +1,77 @@
 "use client";
 
-import { StatCard } from '@/components/sections/dashboard/stat-card';
-import { DollarSign, MousePointerClick, TrendingUp, Star } from 'lucide-react';
-
-// Mock data for sparklines
-const spendData = [
-  { name: 'Jan', value: 300 }, { name: 'Feb', value: 450 }, { name: 'Mar', value: 400 },
-  { name: 'Apr', value: 600 }, { name: 'May', value: 550 }, { name: 'Jun', value: 700 },
-];
-const cpmData = [
-  { name: 'Jan', value: 5 }, { name: 'Feb', value: 4.5 }, { name: 'Mar', value: 4.8 },
-  { name: 'Apr', value: 4.2 }, { name: 'May', value: 4.6 }, { name: 'Jun', value: 4.1 },
-];
-const trendHitsData = [
-  { name: 'Jan', value: 12 }, { name: 'Feb', value: 15 }, { name: 'Mar', value: 10 },
-  { name: 'Apr', value: 18 }, { name: 'May', value: 22 }, { name: 'Jun', value: 20 },
-];
-const watchlistData = [
-  { name: 'Jan', value: 5 }, { name: 'Feb', value: 8 }, { name: 'Mar', value: 7 },
-  { name: 'Apr', value: 10 }, { name: 'May', value: 12 }, { name: 'Jun', value: 15 },
-];
+import { OverviewStatCard } from '@/components/sections/dashboard/overview-stat-card';
+import { HotTrendsSection } from '@/components/sections/dashboard/hot-trends-section';
+import { TrendQuestChallengesSection } from '@/components/sections/dashboard/trendquest-challenges-section';
+import { TrendingUp, Eye, DollarSign, Zap, MapPin, Edit } from 'lucide-react'; // Zap for TrendQuest Level
+import Image from 'next/image';
+import { Button } from '@/components/ui/button';
 
 export default function DashboardOverviewPage() {
   return (
-    <div className="space-y-6">
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard 
-          title="Total Spend" 
-          value="$12,345" 
-          icon={DollarSign} 
-          change="+5.2%" 
+    <div className="space-y-6 p-1"> {/* Reduced padding from p-6 if layout handles it */}
+      {/* Welcome Message */}
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 p-6 rounded-lg bg-card shadow">
+        <div>
+          <h1 className="text-3xl font-bold font-headline text-foreground">
+            Welcome back, Alex Dropshipper! <span role="img" aria-label="waving hand">👋</span>
+          </h1>
+          <p className="text-muted-foreground flex items-center mt-1">
+            <MapPin className="h-4 w-4 mr-1.5 text-muted-foreground" />
+            Scanning trends in San Francisco, CA
+            <Button variant="ghost" size="icon" className="ml-2 h-6 w-6 text-muted-foreground hover:text-primary">
+              <Edit className="h-3.5 w-3.5"/>
+              <span className="sr-only">Edit location</span>
+            </Button>
+          </p>
+        </div>
+        <div className="mt-4 sm:mt-0 text-right">
+            <p className="text-2xl font-bold text-primary">1250</p>
+            <p className="text-xs text-muted-foreground">TrendQuest Points</p>
+        </div>
+      </div>
+
+      {/* Stat Cards Grid */}
+      <div className="grid gap-5 md:grid-cols-2 xl:grid-cols-4">
+        <OverviewStatCard 
+          title="Active Trends" 
+          value="127" 
+          icon={TrendingUp}
+          iconColor="text-green-500"
+          change="+12% from last week" 
           changeType="positive"
-          chartData={spendData}
-          chartType="line"
         />
-        <StatCard 
-          title="Average CPM" 
-          value="$4.50" 
-          icon={MousePointerClick} 
-          change="-0.8%" 
-          changeType="negative"
-          chartData={cpmData}
-          chartType="line"
-        />
-        <StatCard 
-          title="Trend Hits" 
-          value="128" 
-          icon={TrendingUp} 
-          change="+15" 
-          changeType="positive"
-          chartData={trendHitsData}
-          chartType="bar"
-        />
-        <StatCard 
+        <OverviewStatCard 
           title="Watchlist Items" 
-          value="42" 
-          icon={Star} 
-          change="+3" 
-          changeType="positive"
-          chartData={watchlistData}
-          chartType="bar"
+          value="0" 
+          icon={Eye} 
+          iconColor="text-blue-500"
+          subValue="2 alerts pending"
+        />
+        <OverviewStatCard 
+          title="Profit Potential" 
+          value="$8.2K" 
+          icon={DollarSign} 
+          iconColor="text-purple-500"
+          subValue="Monthly forecast"
+        />
+        <OverviewStatCard 
+          title="TrendQuest Level" 
+          value="Level 3" 
+          icon={Zap}
+          iconColor="text-yellow-400"
+          progress={75} // Example progress
+          footerText="2500 / 3000 XP"
         />
       </div>
       
+      {/* Main Content Grid: Hot Trends and Challenges */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2 bg-card p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4 font-headline">Recent Activity</h2>
-          {/* Placeholder for recent activity feed or chart */}
-          <div className="h-64 flex items-center justify-center text-muted-foreground">
-            Activity Feed/Chart Placeholder
-          </div>
+        <div className="lg:col-span-2">
+          <HotTrendsSection />
         </div>
-        <div className="bg-card p-6 rounded-lg shadow">
-          <h2 className="text-xl font-semibold mb-4 font-headline">Top Performing Products</h2>
-          {/* Placeholder for top products list */}
-          <ul className="space-y-3">
-            {[1,2,3,4].map(i => (
-              <li key={i} className="flex items-center justify-between p-2 rounded hover:bg-secondary">
-                <span>Product Name {i}</span>
-                <span className="text-sm text-primary font-medium">+{20-i*2}%</span>
-              </li>
-            ))}
-          </ul>
+        <div>
+          <TrendQuestChallengesSection />
         </div>
       </div>
     </div>
