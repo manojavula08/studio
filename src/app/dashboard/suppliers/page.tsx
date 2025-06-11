@@ -1,6 +1,6 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users } from 'lucide-react';
+import { Users, Construction } from 'lucide-react';
 
 export default function SuppliersPage() {
   return (
@@ -12,12 +12,14 @@ export default function SuppliersPage() {
             Suppliers
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <p className="text-muted-foreground">
-            This is the Suppliers page. Content and specific features will be added here based on your requirements to match the "Lovable" site's Suppliers section.
+        <CardContent className="flex flex-col items-center justify-center text-center py-12">
+          <Construction className="h-16 w-16 text-primary/70 mb-4" />
+          <h3 className="text-xl font-semibold mb-2 text-foreground">Feature Coming Soon!</h3>
+          <p className="text-muted-foreground max-w-md">
+            We're hard at work developing our new Suppliers management feature. It's currently in the testing phase and will be available soon.
           </p>
-          <p className="mt-4">
-            Please describe how supplier information should be presented, any filtering or search capabilities, and what details are important for each supplier.
+          <p className="text-muted-foreground mt-2 max-w-md">
+            This section will allow you to manage supplier information, utilize advanced filtering, and access detailed insights. Stay tuned for updates!
           </p>
         </CardContent>
       </Card>
