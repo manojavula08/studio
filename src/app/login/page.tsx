@@ -1,6 +1,7 @@
 "use client";
 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation'; // Added useRouter
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -9,6 +10,8 @@ import { TrendingUp, LogIn } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 export default function LoginPage() {
+  const router = useRouter(); // Initialized router
+
   // In a real app, you'd handle form submission here, e.g., with Firebase Auth
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -44,6 +47,15 @@ export default function LoginPage() {
             </div>
             <Button type="submit" className="w-full text-lg">
               <LogIn className="mr-2 h-5 w-5" /> Log In
+            </Button>
+            {/* Added Test Admin Login Button */}
+            <Button
+              type="button"
+              variant="outline"
+              className="w-full"
+              onClick={() => router.push('/dashboard')}
+            >
+              Login as Admin (Test Shortcut)
             </Button>
           </form>
           <Separator className="my-6" />
