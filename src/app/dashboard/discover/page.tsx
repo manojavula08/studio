@@ -15,9 +15,10 @@ import {
   TrendingUp,
   Heart,
   Zap,
-  Flame // Added Flame for "Hot" badge
+  Flame
 } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { TrendHeatmapSection } from '@/components/sections/dashboard/trend-heatmap-section'; // Added import
 
 // Mock store for now - replace with actual Zustand store later
 interface AppState {
@@ -59,14 +60,14 @@ interface DiscoverItem {
   supplierSuggestions: string[];
   demandForecast: { nextWeek: number; nextMonth: number; seasonal: number };
   aiInsights: string[];
-  // imageUrl: string; // Removed as per new design
-  // imageHint: string; // Removed as per new design
+  // imageUrl is not used in this version as per the reference image
+  // imageHint is not used in this version
 }
 
 export default function DiscoverPage() {
   const [state, setState] = useState<AppState>(initialAppState);
   const [watchlist, _setLocalWatchlist] = useState<Array<{ id: string; name: string }>>(initialAppState.watchlist);
-  setLocalWatchlist = _setLocalWatchlist; // Assign to the outer scope variable
+  setLocalWatchlist = _setLocalWatchlist; 
 
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
@@ -74,11 +75,9 @@ export default function DiscoverPage() {
 
   const handleAddToWatchlist = (item: DiscoverItem) => {
     if (watchlist.some(w => w.id === item.id)) {
-        // Already in watchlist, potentially remove or do nothing
-        // For now, let's assume dispatch handles this or it's a toggle
-        mockDispatch({ type: 'REMOVE_FROM_WATCHLIST', payload: item });
+        mockDispatch({ type: 'REMOVE_FROM_WATCHLIST', payload: { id: item.id } });
     } else {
-        mockDispatch({ type: 'ADD_TO_WATCHLIST', payload: item });
+        mockDispatch({ type: 'ADD_TO_WATCHLIST', payload: { id: item.id, name: item.name } });
     }
   };
 
@@ -134,6 +133,8 @@ export default function DiscoverPage() {
         <h1 className="text-3xl font-bold font-headline">Discover Trends</h1>
         <p className="text-muted-foreground">Explore trending products in {state.selectedLocation}</p>
       </div>
+
+      <TrendHeatmapSection selectedLocation={state.selectedLocation} />
 
       {/* Search and Filters */}
       <Card>
@@ -221,10 +222,10 @@ export default function DiscoverPage() {
                   </CardDescription>
                 </div>
                 <div className={cn(
-                  "flex flex-col items-center justify-center px-2.5 py-1 rounded-md text-white min-w-[70px] text-center",
-                  item.trendScore >= 90 ? 'bg-green-500' : 'bg-yellow-500'
+                  "flex flex-col items-center justify-center px-2 py-1 rounded-md text-white min-w-[60px] text-center", // Adjusted min-width
+                  item.trendScore >= 90 ? 'bg-green-500' : 'bg-yellow-500' // Simplified colors
                 )}>
-                  {item.trendScore >= 90 && <span className="text-[10px] font-semibold leading-none">HOT</span>}
+                  {item.trendScore >= 90 && <span className="text-[10px] font-semibold leading-none flex items-center"><Flame className="w-2.5 h-2.5 mr-0.5"/>HOT</span>}
                   <div className="text-2xl font-bold leading-none">{item.trendScore}</div>
                   <div className="text-[10px] opacity-90 leading-none mt-0.5">Trend Score</div>
                 </div>
@@ -259,7 +260,7 @@ export default function DiscoverPage() {
                 <div className="bg-primary/10 p-2.5 rounded-md">
                   <div className="flex items-start">
                     <Zap className="w-4 h-4 text-primary mr-2 mt-px flex-shrink-0" />
-                    <div className="text-xs text-primary/90">
+                    <div className="text-xs text-primary/90"> 
                       <strong>AI Insight:</strong> {item.aiInsights[0]}
                     </div>
                   </div>
