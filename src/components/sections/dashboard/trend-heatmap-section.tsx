@@ -45,7 +45,9 @@ export function TrendHeatmapSection({ selectedLocation }: TrendHeatmapSectionPro
           <p className="text-xs sm:text-sm text-muted-foreground text-center mt-1">
             Showing trend intensity for <span className="font-semibold text-primary">{selectedLocation}</span>.
           </p>
-          <p className="text-xs text-muted-foreground mt-2">(Actual map rendering to be implemented)</p>
+          <p className="text-xs text-muted-foreground mt-2 max-w-md text-center">
+            (Actual map rendering to be implemented. Data would be derived from AI predictions analyzing product buzz, location affinity, and demand signals from various sources.)
+          </p>
         </div>
         <div className="mt-4 flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-6 text-sm">
           <div className="flex items-center">
