@@ -1,3 +1,4 @@
+
 "use client";
 
 import { Button } from "@/components/ui/button";
@@ -24,11 +25,11 @@ export function ProfileTab() {
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="space-y-2">
             <Label htmlFor="fullName">Full Name</Label>
-            <Input id="fullName" defaultValue="Current User Name" />
+            <Input id="fullName" defaultValue="Alex Chen" />
           </div>
           <div className="space-y-2">
             <Label htmlFor="email">Email Address</Label>
-            <Input id="email" type="email" defaultValue="user@example.com" disabled />
+            <Input id="email" type="email" defaultValue="alex.chen@example.com" disabled />
           </div>
         </div>
          <div className="space-y-2">

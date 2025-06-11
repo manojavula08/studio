@@ -1,4 +1,6 @@
 
+"use client";
+
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { ProfileTab } from '@/components/sections/settings/profile-tab';
 import { BillingTab } from '@/components/sections/settings/billing-tab';

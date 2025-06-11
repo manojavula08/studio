@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -12,7 +13,7 @@ const integrations = [
     id: 'shopify', 
     name: 'Shopify', 
     description: 'Sync your Shopify store products and orders.', 
-    logo: 'https://placehold.co/40x40.png/16A34A/FFFFFF?text=S', // Shopify-like green
+    logo: 'https://placehold.co/40x40.png', 
     logoHint: 'Shopify logo',
     isActive: true 
   },
@@ -20,7 +21,7 @@ const integrations = [
     id: 'google-ads', 
     name: 'Google Ads', 
     description: 'Import campaign data and track performance.', 
-    logo: 'https://placehold.co/40x40.png/4285F4/FFFFFF?text=G', // Google blue
+    logo: 'https://placehold.co/40x40.png', 
     logoHint: 'Google Ads logo',
     isActive: false 
   },
@@ -28,7 +29,7 @@ const integrations = [
     id: 'facebook-ads', 
     name: 'Facebook Ads', 
     description: 'Connect your Facebook Ad account for insights.', 
-    logo: 'https://placehold.co/40x40.png/1877F2/FFFFFF?text=F', // Facebook blue
+    logo: 'https://placehold.co/40x40.png', 
     logoHint: 'Facebook Ads logo',
     isActive: true 
   },
@@ -36,7 +37,7 @@ const integrations = [
     id: 'slack', 
     name: 'Slack', 
     description: 'Get real-time notifications in your Slack channels.', 
-    logo: 'https://placehold.co/40x40.png/E01E5A/FFFFFF?text=S', // Slack-like color
+    logo: 'https://placehold.co/40x40.png', 
     logoHint: 'Slack logo',
     isActive: false 
   },
@@ -68,7 +69,7 @@ export function IntegrationsTab() {
                 </div>
               </div>
               <div className="flex items-center space-x-3">
-                <Switch id={`switch-${integration.id}`} checked={integration.isActive} aria-label={`Toggle ${integration.name} integration`} />
+                <Switch id={`switch-${integration.id}`} defaultChecked={integration.isActive} aria-label={`Toggle ${integration.name} integration`} />
                 <Button variant="outline" size="sm">
                   <Settings2 className="mr-1.5 h-4 w-4" /> Setup
                 </Button>
