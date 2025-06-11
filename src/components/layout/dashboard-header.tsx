@@ -1,10 +1,11 @@
+
 "use client";
 
 import { ModeToggle } from '@/components/mode-toggle';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Input } from '@/components/ui/input';
-import { Menu, Bell, UserCircle, Search, Mic, Zap, Settings, LogOutIcon, CreditCard } from 'lucide-react';
+import { Menu, Bell, UserCircle, Search, Mic, Zap, Settings, LogOutIcon, CreditCard, MapPin, ChevronDown } from 'lucide-react';
 import { DashboardSidebar } from './dashboard-sidebar';
 import Link from 'next/link';
 import {
@@ -33,7 +34,13 @@ export function DashboardHeader() {
         </SheetContent>
       </Sheet>
       
-      <div className="relative flex-1 max-w-xl">
+      <Button variant="outline" className="hidden sm:flex items-center gap-2 text-muted-foreground hover:text-foreground">
+        <MapPin className="h-4 w-4" />
+        <span>New York, 10001</span>
+        <ChevronDown className="h-4 w-4 opacity-50" />
+      </Button>
+
+      <div className="relative flex-1 max-w-xl ml-2">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           type="search"
