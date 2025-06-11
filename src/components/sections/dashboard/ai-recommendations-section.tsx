@@ -1,7 +1,7 @@
 
 "use client";
 
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { useState } from 'react';
 import { AiRecommendationCard, type AiRecommendation } from './ai-recommendation-card';
 import { Zap } from 'lucide-react'; 
 
@@ -53,6 +53,18 @@ const mockRecommendations: AiRecommendation[] = [
 ];
 
 export function AiRecommendationsSection() {
+  const [watchedItemIds, setWatchedItemIds] = useState<string[]>([]);
+
+  const handleToggleWatchlist = (id: string) => {
+    setWatchedItemIds(prevIds => 
+      prevIds.includes(id) 
+        ? prevIds.filter(itemId => itemId !== id)
+        : [...prevIds, id]
+    );
+    // In a real app, you would also dispatch an action to a global store or make an API call.
+    console.log("Toggled watchlist for item:", id, "Current watchlist:", watchedItemIds.includes(id) ? watchedItemIds.filter(itemId => itemId !== id) : [...watchedItemIds, id] );
+  };
+
   return (
     <section className="space-y-4">
       <div className="flex items-center space-x-2">
@@ -64,10 +76,14 @@ export function AiRecommendationsSection() {
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {mockRecommendations.map((recommendation) => (
-          <AiRecommendationCard key={recommendation.id} recommendation={recommendation} />
+          <AiRecommendationCard 
+            key={recommendation.id} 
+            recommendation={recommendation}
+            isInWatchlist={watchedItemIds.includes(recommendation.id)}
+            onToggleWatchlist={handleToggleWatchlist}
+          />
         ))}
       </div>
     </section>
   );
 }
-

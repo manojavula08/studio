@@ -19,8 +19,8 @@ export interface RecommendationTag {
 export interface AiRecommendation {
   id: string;
   name: string;
-  imageUrl: string; // Added for product image
-  imageHint: string; // Added for AI image generation hint
+  imageUrl: string;
+  imageHint: string;
   tags: RecommendationTag[];
   location: string;
   priceRange: string;
@@ -31,12 +31,14 @@ export interface AiRecommendation {
 
 interface AiRecommendationCardProps {
   recommendation: AiRecommendation;
+  isInWatchlist: boolean;
+  onToggleWatchlist: (id: string) => void;
 }
 
-export function AiRecommendationCard({ recommendation }: AiRecommendationCardProps) {
+export function AiRecommendationCard({ recommendation, isInWatchlist, onToggleWatchlist }: AiRecommendationCardProps) {
   return (
     <Card className="overflow-hidden shadow-sm hover:shadow-md transition-shadow">
-      <div className="relative w-full h-40 sm:h-48"> {/* Container for the image */}
+      <div className="relative w-full h-40 sm:h-48">
         <Image
           src={recommendation.imageUrl || "https://placehold.co/400x250.png"}
           alt={recommendation.name}
@@ -63,8 +65,22 @@ export function AiRecommendationCard({ recommendation }: AiRecommendationCardPro
           </div>
           <div className="text-right flex-shrink-0 pl-2">
             <p className="text-3xl font-bold text-primary">{recommendation.score}</p>
-            <Button variant="ghost" size="sm" className="text-muted-foreground hover:text-primary -mr-2 mt-0.5">
-              <Heart className="h-3.5 w-3.5 mr-1" /> Watch
+            <Button 
+              variant="ghost" 
+              size="sm" 
+              className={cn(
+                "text-muted-foreground hover:text-primary -mr-2 mt-0.5",
+                isInWatchlist && "text-primary"
+              )}
+              onClick={() => onToggleWatchlist(recommendation.id)}
+            >
+              <Heart 
+                className={cn(
+                  "h-3.5 w-3.5 mr-1",
+                  isInWatchlist && "fill-current"
+                )} 
+              /> 
+              {isInWatchlist ? "Watching" : "Watch"}
             </Button>
           </div>
         </div>
@@ -94,4 +110,3 @@ export function AiRecommendationCard({ recommendation }: AiRecommendationCardPro
     </Card>
   );
 }
-
