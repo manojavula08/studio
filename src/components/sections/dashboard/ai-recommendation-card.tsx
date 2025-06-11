@@ -1,15 +1,17 @@
 
 "use client";
 
+import Image from 'next/image';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { MapPin, Heart, Info } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 export interface RecommendationTag {
   text: string;
-  type: 'category' | 'occasion'; // Example types, adjust as needed
+  type: 'category' | 'occasion'; 
   variant?: 'default' | 'secondary' | 'outline' | 'destructive' | null | undefined;
   className?: string;
 }
@@ -17,6 +19,8 @@ export interface RecommendationTag {
 export interface AiRecommendation {
   id: string;
   name: string;
+  imageUrl: string; // Added for product image
+  imageHint: string; // Added for AI image generation hint
   tags: RecommendationTag[];
   location: string;
   priceRange: string;
@@ -32,6 +36,15 @@ interface AiRecommendationCardProps {
 export function AiRecommendationCard({ recommendation }: AiRecommendationCardProps) {
   return (
     <Card className="overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+      <div className="relative w-full h-40 sm:h-48"> {/* Container for the image */}
+        <Image
+          src={recommendation.imageUrl || "https://placehold.co/400x250.png"}
+          alt={recommendation.name}
+          layout="fill"
+          objectFit="cover"
+          data-ai-hint={recommendation.imageHint}
+        />
+      </div>
       <CardContent className="p-4 space-y-3">
         <div className="flex justify-between items-start">
           <div>
@@ -82,6 +95,3 @@ export function AiRecommendationCard({ recommendation }: AiRecommendationCardPro
   );
 }
 
-// Helper function for cn if not already globally available in this context
-// In a real setup, ensure cn is imported from '@/lib/utils'
-const cn = (...classes: (string | undefined | null | false)[]) => classes.filter(Boolean).join(' ');
