@@ -10,6 +10,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useToast } from "@/hooks/use-toast";
 import { updateUserProfile, getUserProfile, type UserProfileData } from "@/app/actions/user-profile-actions";
 import { Loader2 } from "lucide-react";
+// Removed direct auth import as email should come from server action
+// import { auth } from "@/lib/firebase/firestore";
 
 export function ProfileTab() {
   const [fullName, setFullName] = useState('');
@@ -25,24 +27,26 @@ export function ProfileTab() {
       if (response.success && response.data) {
         setFullName(response.data.fullName || '');
         setCompanyName(response.data.companyName || '');
-        setEmail(response.data.email || 'Not available');
+        setEmail(response.data.email || 'Not available'); // Rely on email from server action
       } else if (!response.success) {
         // Don't show error toast on initial load if profile just doesn't exist yet
         // toast({ title: "Error loading profile", description: response.message, variant: "destructive" });
         console.warn("Failed to load profile or profile not found:", response.message);
         setEmail('Could not load email');
       } else {
-        // response.success is true but no data (e.g. new user)
-         setEmail(auth.currentUser?.email || 'Not available'); // Try to get from auth directly for new profile
+        // This case implies response.success is true but response.data might be empty (e.g. truly new user with no auth email recorded yet)
+        // The getUserProfile action attempts to set email: currentUser.email || undefined for new profiles.
+        setEmail('No email found. Please save profile.');
       }
     }).catch(error => {
       console.error("Exception while fetching profile:", error);
       toast({ title: "Error", description: "An exception occurred while fetching your profile.", variant: "destructive" });
+      setEmail('Error loading email');
     })
     .finally(() => {
       setIsLoading(false);
     });
-  }, [toast]);
+  }, []); // Empty dependency array to run once on mount
 
 
   const handleProfileSave = () => {
@@ -50,6 +54,9 @@ export function ProfileTab() {
       const result = await updateUserProfile({ fullName, companyName });
       if (result.success) {
         toast({ title: "Success", description: result.message });
+        // Optionally re-fetch profile to ensure UI consistency if email could be updated
+        // or if other server-generated fields (like lastUpdated) are displayed.
+        // For now, we assume fullName and companyName are the only mutable fields here.
       } else {
         toast({ title: "Error", description: result.message, variant: "destructive" });
       }
@@ -71,7 +78,7 @@ export function ProfileTab() {
           <div className="flex items-center space-x-4">
             <Avatar className="h-20 w-20">
               <AvatarImage src="https://placehold.co/100x100.png" alt="User avatar" data-ai-hint="user avatar professional" />
-              <AvatarFallback>{fullName ? fullName.charAt(0).toUpperCase() : 'U'}</AvatarFallback>
+              <AvatarFallback>{fullName ? fullName.charAt(0).toUpperCase() : (email ? email.charAt(0).toUpperCase() : 'U')}</AvatarFallback>
             </Avatar>
             <Button variant="outline" disabled>Change Picture (soon)</Button>
           </div>
@@ -79,15 +86,15 @@ export function ProfileTab() {
             <div className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="fullName">Full Name</Label>
-                <Input disabled placeholder="Loading..." />
+                <Input disabled placeholder="Loading..." className="bg-muted/50"/>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email Address</Label>
-                <Input disabled placeholder="Loading..." />
+                <Input disabled placeholder="Loading..." className="bg-muted/50"/>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="company">Company Name (Optional)</Label>
-                <Input disabled placeholder="Loading..." />
+                <Input disabled placeholder="Loading..." className="bg-muted/50"/>
               </div>
             </div>
           ) : (
@@ -121,8 +128,8 @@ export function ProfileTab() {
         </CardContent>
         <CardFooter>
           <Button onClick={handleProfileSave} disabled={isSaving || isLoading}>
-            {isSaving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-            {isSaving ? "Saving..." : "Save Profile Changes"}
+            {isSaving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
+            {isSaving ? "Saving..." : isLoading ? "Loading..." : "Save Profile Changes"}
           </Button>
         </CardFooter>
       </Card>
@@ -153,6 +160,3 @@ export function ProfileTab() {
     </div>
   );
 }
-
-// Need to get auth instance for current user email if profile is new
-import { auth } from "@/lib/firebase/firestore";
