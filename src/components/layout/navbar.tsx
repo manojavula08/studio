@@ -1,7 +1,8 @@
+
 "use client";
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Menu, TrendingUp } from 'lucide-react';
 import { ModeToggle } from '@/components/mode-toggle';
 
@@ -48,6 +49,9 @@ export function Navbar() {
               </Button>
             </SheetTrigger>
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
+              <SheetHeader>
+                <SheetTitle className="sr-only">Main Navigation Menu</SheetTitle>
+              </SheetHeader>
               <nav className="flex flex-col space-y-4 mt-8">
               <Link href="/" className="mb-4 flex items-center space-x-2">
                 <TrendingUp className="h-6 w-6 text-primary" />

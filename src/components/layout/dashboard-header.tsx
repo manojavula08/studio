@@ -3,7 +3,7 @@
 
 import { ModeToggle } from '@/components/mode-toggle';
 import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { Input } from '@/components/ui/input';
 import { Menu, Bell, UserCircle, Search, Mic, Settings, LogOutIcon, CreditCard, MapPin, ChevronDown } from 'lucide-react';
 import { DashboardSidebar } from './dashboard-sidebar';
@@ -30,6 +30,9 @@ export function DashboardHeader() {
           </Button>
         </SheetTrigger>
         <SheetContent side="left" className="sm:max-w-xs p-0 bg-sidebar border-r-sidebar-border">
+          <SheetHeader>
+            <SheetTitle className="sr-only">Dashboard Navigation Menu</SheetTitle>
+          </SheetHeader>
           <DashboardSidebar />
         </SheetContent>
       </Sheet>
