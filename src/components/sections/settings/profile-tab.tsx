@@ -106,7 +106,10 @@ export function ProfileTab() {
       <Card>
         <CardHeader>
           <CardTitle className="font-headline">Change Password</CardTitle>
-          <CardDescription>Update your account password. For security, you'll need to enter your current password.</CardDescription>
+          <CardDescription>
+            Update your account password. For security, you&apos;ll need to enter
+            your current password.
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
