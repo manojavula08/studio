@@ -18,7 +18,7 @@ import {
   Compass,
   Bookmark,
   Users,
-  SettingsIcon as AccountIcon, // Renamed for clarity
+  SettingsIcon, // Renamed for clarity
   Zap, 
   LogOut,
   HelpCircle,
@@ -40,7 +40,7 @@ const mainNavItems: NavItem[] = [
   { href: '/dashboard/discover', label: 'Discover', icon: Compass },
   { href: '/dashboard/watchlist', label: 'Watchlist', icon: Bookmark },
   { href: '/dashboard/suppliers', label: 'Suppliers', icon: Users },
-  { href: '/dashboard/account', label: 'Account', icon: AccountIcon },
+  { href: '/dashboard/settings', label: 'Settings', icon: SettingsIcon },
 ];
 
 
