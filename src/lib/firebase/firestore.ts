@@ -26,38 +26,51 @@ const firebaseConfig = {
   appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
 
-function initializeFirebaseApp(): FirebaseApp {
-  if (!getApps().length) {
-    // Log the config being used, helpful for debugging environment variable issues.
-    // console.log('Attempting to initialize Firebase with config:', firebaseConfig);
+let app: FirebaseApp | null = null;
+let db: Firestore | null = null;
+let auth: Auth | null = null;
+let firebaseInitialized = false;
 
-    if (
-      !firebaseConfig.apiKey ||
-      !firebaseConfig.authDomain ||
-      !firebaseConfig.projectId ||
-      !firebaseConfig.appId
-    ) {
-      // This error means your .env.local file is likely missing or incorrect,
-      // or you haven't restarted the dev server after changing it.
-      console.error('Firebase Initialization Error: One or more NEXT_PUBLIC_FIREBASE_ environment variables are missing or undefined.');
-      console.error('Values seen by the application (check your server console):');
-      console.error(`  NEXT_PUBLIC_FIREBASE_API_KEY: ${process.env.NEXT_PUBLIC_FIREBASE_API_KEY}`);
-      console.error(`  NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: ${process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN}`);
-      console.error(`  NEXT_PUBLIC_FIREBASE_PROJECT_ID: ${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}`);
-      console.error(`  NEXT_PUBLIC_FIREBASE_APP_ID: ${process.env.NEXT_PUBLIC_FIREBASE_APP_ID}`);
-      console.error(`  NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET: ${process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET}`);
-      console.error(`  NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID: ${process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID}`);
-      console.error('Please ensure these are correctly set in your .env.local file (in the project root) and that you have restarted your Next.js development server.');
-      
-      throw new Error(
-        'Firebase configuration is incomplete. Crucial environment variables (NEXT_PUBLIC_FIREBASE_API_KEY, NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN, NEXT_PUBLIC_FIREBASE_PROJECT_ID, NEXT_PUBLIC_FIREBASE_APP_ID) are missing. Please check your .env.local file and restart your server.'
-      );
+function initializeFirebase(): void {
+  if (firebaseInitialized) return;
+
+  if (
+    firebaseConfig.apiKey &&
+    firebaseConfig.authDomain &&
+    firebaseConfig.projectId &&
+    firebaseConfig.appId
+  ) {
+    try {
+      if (getApps().length === 0) {
+        app = initializeApp(firebaseConfig);
+      } else {
+        app = getApp();
+      }
+      db = getFirestore(app);
+      auth = getAuth(app);
+      firebaseInitialized = true;
+    } catch (e) {
+        console.error("Firebase initialization failed with an exception:", e);
     }
-    return initializeApp(firebaseConfig);
+  } else {
+    console.error('**********************************************************************************');
+    console.error('*** FIREBASE IS NOT CONFIGURED!                                                  ***');
+    console.error('***                                                                              ***');
+    console.error('*** Please create a .env.local file in the root of your project and add your     ***');
+    console.error('*** Firebase credentials. Any features requiring Firebase will be disabled.      ***');
+    console.error('***                                                                              ***');
+    console.error('*** Missing values:                                                              ***');
+    if (!firebaseConfig.apiKey) console.error('*** - NEXT_PUBLIC_FIREBASE_API_KEY                                               ***');
+    if (!firebaseConfig.authDomain) console.error('*** - NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN                                           ***');
+    if (!firebaseConfig.projectId) console.error('*** - NEXT_PUBLIC_FIREBASE_PROJECT_ID                                            ***');
+    if (!firebaseConfig.appId) console.error('*** - NEXT_PUBLIC_FIREBASE_APP_ID                                                ***');
+    console.error('**********************************************************************************');
   }
-  return getApp();
 }
 
-export const app: FirebaseApp = initializeFirebaseApp();
-export const db: Firestore = getFirestore(app);
-export const auth: Auth = getAuth(app);
+initializeFirebase();
+
+// We export the initialized services, which will be null if initialization failed.
+// Code using these exports must handle the null case.
+export { app, db, auth };
+

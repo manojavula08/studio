@@ -16,6 +16,13 @@ export interface UserProfileData {
 export async function updateUserProfile(
   data: Pick<UserProfileData, 'fullName' | 'companyName'>
 ): Promise<{ success: boolean; message: string }> {
+  // Gracefully fail if Firebase is not initialized
+  if (!auth || !db) {
+    const message = 'Firebase is not configured. Cannot update profile.';
+    console.error(message);
+    return { success: false, message: message };
+  }
+  
   try {
     const currentUser: User | null = auth.currentUser;
 
@@ -52,6 +59,13 @@ export async function getUserProfile(): Promise<{
   message: string;
   data?: UserProfileData;
 }> {
+  // Gracefully fail if Firebase is not initialized
+  if (!auth || !db) {
+    const message = 'Firebase is not configured. Cannot get profile.';
+    console.error(message);
+    return { success: false, message: message, data: { email: 'Firebase not configured.' } };
+  }
+
   try {
     const currentUser: User | null = auth.currentUser;
 
@@ -79,3 +93,4 @@ export async function getUserProfile(): Promise<{
     return { success: false, message: `Failed to fetch profile: ${errorMessage}` };
   }
 }
+
